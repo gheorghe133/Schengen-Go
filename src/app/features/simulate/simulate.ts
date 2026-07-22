@@ -34,4 +34,13 @@ export class Simulate {
       this.violationHitsPlannedTrip = (this.result.firstViolationDate ?? '') > this.exit;
     }
   }
+
+  protected reset(): void {
+    this.entry = '';
+    this.exit = '';
+    this.error = null;
+    this.result = null;
+    this.maxStayIfStartingHere = null;
+    this.violationHitsPlannedTrip = false;
+  }
 }
