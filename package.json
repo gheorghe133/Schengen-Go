@@ -5,6 +5,7 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "postbuild": "node -e \"require('fs').copyFileSync('dist/SchengenGo/browser/index.csr.html', 'dist/SchengenGo/browser/index.html')\"",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:SchengenGo": "node dist/SchengenGo/server/server.mjs",
