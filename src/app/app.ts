@@ -3,7 +3,7 @@ import { RouterOutlet } from '@angular/router';
 
 import { AuthService } from './core/firebase/auth.service';
 import { SignIn } from './core/firebase/sign-in';
-import { ThemeSwitcher } from './core/theme/theme-switcher';
+import { ThemeSwitcher } from './core/theme-switcher';
 
 @Component({
   selector: 'app-root',

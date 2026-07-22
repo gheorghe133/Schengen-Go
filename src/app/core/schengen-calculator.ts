@@ -1,29 +1,14 @@
+import {
+  FutureComplianceCheck,
+  SchengenStatus,
+  TripEvaluation,
+} from '../models/schengen-status.model';
+import { Trip } from '../models/trip.model';
 import { addDays, fromEpochDay, toEpochDay } from './date-utils';
-import { Trip } from './trip.model';
 
 export const SCHENGEN_LIMIT_DAYS = 90;
 export const SCHENGEN_WINDOW_DAYS = 180;
 
-export interface SchengenStatus {
-  referenceDate: string;
-  usedDays: number;
-  remainingDays: number;
-  overstayDays: number;
-}
-
-export interface TripEvaluation {
-  allowed: boolean;
-  firstViolationDate: string | null;
-  maxUsedDays: number;
-}
-
-export interface FutureComplianceCheck {
-  willExceedLimit: boolean;
-  violationDate: string | null;
-  maxUsedDays: number;
-}
-
-/** Counts the distinct days covered by `trips` inside the 180-day window ending on `referenceDate`, inclusive. */
 export function daysUsedInWindow(trips: Trip[], referenceDate: string): number {
   const windowEnd = toEpochDay(referenceDate);
   const windowStart = windowEnd - (SCHENGEN_WINDOW_DAYS - 1);
@@ -50,11 +35,9 @@ export function getStatus(trips: Trip[], referenceDate: string): SchengenStatus 
 }
 
 /**
- * Checks whether a candidate trip can be taken on top of the existing trips without ever
- * exceeding the 90-day limit on any day from the candidate's entry onward — including days
- * that belong to already-planned future trips, which a new earlier candidate can just as
- * easily push over the limit (a day's window only looks backward, so days before the
- * candidate's entry can never be affected by it and don't need checking).
+ * Checks every day from the candidate's entry through the latest exit date among all trips,
+ * including already-planned future ones — a new earlier candidate can push an existing future
+ * trip over the limit even when both are compliant on their own.
  */
 export function canTakeTrip(
   trips: Trip[],
@@ -77,10 +60,7 @@ export function canTakeTrip(
   return { allowed: firstViolationDate === null, firstViolationDate, maxUsedDays };
 }
 
-/**
- * Longest uninterrupted stay starting on `startDate` that never exceeds the 90-day limit.
- * Bounded at 90 by construction: a single continuous stay past 90 days always violates the rule.
- */
+/** A continuous stay past 90 days always violates the rule, so 90 is a safe search bound. */
 export function maxConsecutiveStayFrom(trips: Trip[], startDate: string): number {
   let length = 0;
   for (let offset = 0; offset < SCHENGEN_LIMIT_DAYS; offset++) {
@@ -92,18 +72,15 @@ export function maxConsecutiveStayFrom(trips: Trip[], startDate: string): number
   return length;
 }
 
-/** Whether `date` falls inside any trip (inclusive of entry and exit days). */
 export function isDateCovered(trips: Trip[], date: string): boolean {
   const day = toEpochDay(date);
   return trips.some((trip) => toEpochDay(trip.entry) <= day && day <= toEpochDay(trip.exit));
 }
 
-/** Number of days a trip spans, inclusive of both the entry and exit day. */
 export function tripDurationDays(trip: { entry: string; exit: string }): number {
   return toEpochDay(trip.exit) - toEpochDay(trip.entry) + 1;
 }
 
-/** Whether any part of a trip overlaps the 180-day window ending on `referenceDate`. */
 export function isTripInWindow(
   trip: { entry: string; exit: string },
   referenceDate: string,
@@ -112,7 +89,6 @@ export function isTripInWindow(
   return trip.exit >= windowStart && trip.entry <= referenceDate;
 }
 
-/** Whether a trip lies entirely before the window and can never affect the count again. */
 export function isTripExpired(
   trip: { entry: string; exit: string },
   referenceDate: string,
@@ -122,10 +98,8 @@ export function isTripExpired(
 }
 
 /**
- * Scans every day from `referenceDate` through the last recorded trip's exit date to catch a
- * violation that today's own count doesn't show yet — e.g. two already-added trips that are each
- * fine on their own but, combined, will push a future day over the limit. Days before
- * `referenceDate` are skipped: today's count already reflects them via `getStatus`.
+ * Scans forward from `referenceDate` to catch a violation today's own count doesn't show yet —
+ * e.g. two already-added trips that are each fine alone but, combined, exceed the limit later.
  */
 export function checkFutureCompliance(trips: Trip[], referenceDate: string): FutureComplianceCheck {
   const startDay = toEpochDay(referenceDate);
@@ -146,7 +120,6 @@ export function checkFutureCompliance(trips: Trip[], referenceDate: string): Fut
   return { willExceedLimit: violationDate !== null, violationDate, maxUsedDays };
 }
 
-/** Earliest date on/after `fromDate` on which the existing trips leave at least one free day. */
 export function nextAvailableEntryDate(
   trips: Trip[],
   fromDate: string,

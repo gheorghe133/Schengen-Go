@@ -1,3 +1,5 @@
+import { MonthDay } from '../models/calendar.model';
+
 /** All dates are ISO strings ('YYYY-MM-DD') and are handled as whole UTC days to avoid timezone drift. */
 
 const MS_PER_DAY = 86_400_000;
@@ -15,17 +17,10 @@ export function addDays(iso: string, days: number): string {
   return fromEpochDay(toEpochDay(iso) + days);
 }
 
-/** Validates an entry/exit pair from a date-range form. Returns an error message, or null if valid. */
 export function validateDateRange(entry: string, exit: string): string | null {
   if (!entry || !exit) return 'Completează ambele date.';
   if (entry > exit) return 'Data de intrare trebuie să fie înainte de data de ieșire.';
   return null;
-}
-
-export interface MonthDay {
-  date: string;
-  /** false for the leading/trailing days from adjacent months used to fill out full weeks */
-  inMonth: boolean;
 }
 
 /** A Monday-first grid of full weeks covering `monthIndex0` (0 = January). */

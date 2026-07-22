@@ -1,7 +1,6 @@
 import { computed, effect, Injectable, signal } from '@angular/core';
 
-export type ThemePreference = 'system' | 'light' | 'dark';
-export type ResolvedTheme = 'light' | 'dark';
+import { ResolvedTheme, ThemePreference } from '../models/theme.model';
 
 const STORAGE_KEY = 'schengen-go.theme';
 

@@ -1,8 +1,9 @@
 import { Component, computed, inject, signal } from '@angular/core';
 
-import { addDays, buildMonthGrid, MonthDay } from '../../core/schengen/date-utils';
-import { isDateCovered } from '../../core/schengen/schengen-calculator';
-import { TripsStore } from '../../core/schengen/trips.store';
+import { addDays, buildMonthGrid } from '../../core/date-utils';
+import { isDateCovered } from '../../core/schengen-calculator';
+import { TripsStore } from '../../core/trips.store';
+import { MonthDay } from '../../models/calendar.model';
 
 const MONTH_NAMES = [
   'Ianuarie',

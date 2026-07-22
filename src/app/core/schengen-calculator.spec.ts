@@ -1,3 +1,4 @@
+import { Trip } from '../models/trip.model';
 import { addDays } from './date-utils';
 import {
   canTakeTrip,
@@ -11,7 +12,6 @@ import {
   nextAvailableEntryDate,
   tripDurationDays,
 } from './schengen-calculator';
-import { Trip } from './trip.model';
 
 function trip(id: string, entry: string, exit: string): Trip {
   return { id, entry, exit };

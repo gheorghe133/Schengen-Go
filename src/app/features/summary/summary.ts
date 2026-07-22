@@ -1,7 +1,7 @@
 import { Component, computed, inject } from '@angular/core';
 
-import { checkFutureCompliance } from '../../core/schengen/schengen-calculator';
-import { TripsStore } from '../../core/schengen/trips.store';
+import { checkFutureCompliance } from '../../core/schengen-calculator';
+import { TripsStore } from '../../core/trips.store';
 
 const NEAR_LIMIT_THRESHOLD_DAYS = 10;
 

@@ -1,10 +1,11 @@
 import { computed, effect, inject, Injectable, signal } from '@angular/core';
 import { addDoc, collection, deleteDoc, doc, onSnapshot, writeBatch } from 'firebase/firestore';
 
-import { AuthService } from '../firebase/auth.service';
-import { db } from '../firebase/firebase-app';
-import { getStatus, SchengenStatus } from './schengen-calculator';
-import { Trip } from './trip.model';
+import { SchengenStatus } from '../models/schengen-status.model';
+import { Trip } from '../models/trip.model';
+import { AuthService } from './firebase/auth.service';
+import { db } from './firebase/firebase-app';
+import { getStatus } from './schengen-calculator';
 
 function todayIso(): string {
   return new Date().toISOString().slice(0, 10);

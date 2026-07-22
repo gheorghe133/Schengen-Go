@@ -1,7 +1,4 @@
-export interface SchengenCountry {
-  code: string;
-  name: string;
-}
+import { SchengenCountry } from '../models/schengen-country.model';
 
 /** The 29 Schengen Area member states, sorted by Romanian name for display in a dropdown. */
 export const SCHENGEN_COUNTRIES: SchengenCountry[] = [
