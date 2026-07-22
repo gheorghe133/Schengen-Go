@@ -2,8 +2,8 @@ import { Component, inject, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
 import { AuthService } from './core/firebase/auth.service';
-import { SignIn } from './core/firebase/sign-in';
-import { ThemeSwitcher } from './core/theme-switcher';
+import { SignIn } from './features/auth/sign-in';
+import { ThemeSwitcher } from './shared/ui/theme-switcher/theme-switcher';
 
 @Component({
   selector: 'app-root',

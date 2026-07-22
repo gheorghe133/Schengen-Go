@@ -1,10 +1,9 @@
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-
-import { validateDateRange } from '../../core/date-utils';
-import { canTakeTrip, maxConsecutiveStayFrom } from '../../core/schengen-calculator';
-import { TripsStore } from '../../core/trips.store';
-import { TripEvaluation } from '../../models/schengen-status.model';
+import { TripsStore } from '@core/trips.store';
+import type { TripEvaluation } from '@models/schengen-status.model';
+import { validateDateRange } from '@shared/date-utils';
+import { canTakeTrip, maxConsecutiveStayFrom } from '@shared/schengen-rules/schengen-calculator';
 
 @Component({
   selector: 'app-simulate',

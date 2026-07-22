@@ -1,6 +1,5 @@
 import { computed, effect, Injectable, signal } from '@angular/core';
-
-import { ResolvedTheme, ThemePreference } from '../models/theme.model';
+import type { ResolvedTheme, ThemePreference } from '@models/theme.model';
 
 const STORAGE_KEY = 'schengen-go.theme';
 
