@@ -36,6 +36,7 @@ describe('TripsStore subscription', () => {
     TestBed.tick();
 
     expect(store.trips()).toEqual([]);
+    expect(store.ready()).toBe(false);
     expect(onSnapshot).not.toHaveBeenCalled();
   });
 
@@ -49,10 +50,13 @@ describe('TripsStore subscription', () => {
     });
 
     const store = TestBed.inject(TripsStore);
+    expect(store.ready()).toBe(false);
+
     fakeAuth.user.set({ uid: 'user-1' });
     TestBed.tick();
 
     expect(store.trips()).toEqual([{ id: 't1', entry: '2024-01-01', exit: '2024-01-10' }]);
+    expect(store.ready()).toBe(true);
   });
 
   it('clears trips and unsubscribes when the user signs out', () => {
@@ -68,11 +72,13 @@ describe('TripsStore subscription', () => {
     const store = TestBed.inject(TripsStore);
     TestBed.tick();
     expect(store.trips()).toHaveLength(1);
+    expect(store.ready()).toBe(true);
 
     fakeAuth.user.set(null);
     TestBed.tick();
 
     expect(store.trips()).toEqual([]);
+    expect(store.ready()).toBe(false);
     expect(unsubscribe).toHaveBeenCalled();
   });
 });

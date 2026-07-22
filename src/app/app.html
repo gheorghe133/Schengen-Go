@@ -18,8 +18,12 @@
     </div>
   </header>
 
-  @if (!authService.ready()) {
-    <p class="p-6 text-sm text-gray-500 dark:text-gray-400">Se încarcă…</p>
+  @if (!authService.ready() || (authService.user() && !tripsStore.ready())) {
+    <div class="flex min-h-[70vh] items-center justify-center">
+      <div
+        class="h-8 w-8 animate-spin rounded-full border-2 border-gray-300 border-t-gray-900 dark:border-gray-700 dark:border-t-gray-100"
+      ></div>
+    </div>
   } @else if (!authService.user()) {
     <app-sign-in />
   } @else {

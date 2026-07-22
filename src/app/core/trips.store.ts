@@ -18,6 +18,7 @@ export class TripsStore {
 
   public readonly trips = signal<Trip[]>([]);
   public readonly today = signal<string>(todayIso());
+  public readonly ready = signal(false);
 
   public readonly sortedTrips = computed(() =>
     [...this.trips()].sort((a, b) => (a.entry < b.entry ? 1 : a.entry > b.entry ? -1 : 0)),
@@ -31,12 +32,14 @@ export class TripsStore {
       this.unsubscribe?.();
       this.unsubscribe = null;
       this.trips.set([]);
+      this.ready.set(false);
       if (!user) return;
 
       this.unsubscribe = onSnapshot(collection(db, 'users', user.uid, 'trips'), (snapshot) => {
         this.trips.set(
           snapshot.docs.map((tripDoc) => ({ id: tripDoc.id, ...tripDoc.data() }) as Trip),
         );
+        this.ready.set(true);
       });
     });
   }

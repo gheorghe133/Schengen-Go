@@ -2,6 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
 import { AuthService } from './core/firebase/auth.service';
+import { TripsStore } from './core/trips.store';
 import { SignIn } from './features/auth/sign-in';
 import { ThemeSwitcher } from './shared/ui/theme-switcher/theme-switcher';
 
@@ -14,4 +15,5 @@ import { ThemeSwitcher } from './shared/ui/theme-switcher/theme-switcher';
 export class App {
   protected readonly title = signal('Schengen Go');
   protected readonly authService = inject(AuthService);
+  protected readonly tripsStore = inject(TripsStore);
 }
