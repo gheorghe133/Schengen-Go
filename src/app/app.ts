@@ -12,6 +12,6 @@ import { ThemeSwitcher } from './shared/ui/theme-switcher/theme-switcher';
   styleUrl: './app.css',
 })
 export class App {
-  protected readonly title = signal('SchengenGo');
+  protected readonly title = signal('Schengen Go');
   protected readonly authService = inject(AuthService);
 }
