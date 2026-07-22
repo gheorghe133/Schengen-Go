@@ -1,13 +1,12 @@
-import {
+import type {
   FutureComplianceCheck,
   SchengenStatus,
   TripEvaluation,
-} from '../models/schengen-status.model';
-import { Trip } from '../models/trip.model';
-import { addDays, fromEpochDay, toEpochDay } from './date-utils';
+} from '@models/schengen-status.model';
+import type { Trip } from '@models/trip.model';
 
-export const SCHENGEN_LIMIT_DAYS = 90;
-export const SCHENGEN_WINDOW_DAYS = 180;
+import { addDays, fromEpochDay, toEpochDay } from '../date-utils';
+import { SCHENGEN_LIMIT_DAYS, SCHENGEN_WINDOW_DAYS } from './schengen.constants';
 
 export function daysUsedInWindow(trips: Trip[], referenceDate: string): number {
   const windowEnd = toEpochDay(referenceDate);
@@ -60,7 +59,6 @@ export function canTakeTrip(
   return { allowed: firstViolationDate === null, firstViolationDate, maxUsedDays };
 }
 
-/** A continuous stay past 90 days always violates the rule, so 90 is a safe search bound. */
 export function maxConsecutiveStayFrom(trips: Trip[], startDate: string): number {
   let length = 0;
   for (let offset = 0; offset < SCHENGEN_LIMIT_DAYS; offset++) {
@@ -118,16 +116,4 @@ export function checkFutureCompliance(trips: Trip[], referenceDate: string): Fut
     }
   }
   return { willExceedLimit: violationDate !== null, violationDate, maxUsedDays };
-}
-
-export function nextAvailableEntryDate(
-  trips: Trip[],
-  fromDate: string,
-  searchLimitDays = 366,
-): string | null {
-  for (let offset = 0; offset < searchLimitDays; offset++) {
-    const day = addDays(fromDate, offset);
-    if (daysUsedInWindow(trips, day) < SCHENGEN_LIMIT_DAYS) return day;
-  }
-  return null;
 }

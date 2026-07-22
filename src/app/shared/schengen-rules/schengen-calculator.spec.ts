@@ -1,5 +1,6 @@
-import { Trip } from '../models/trip.model';
-import { addDays } from './date-utils';
+import type { Trip } from '@models/trip.model';
+
+import { addDays } from '../date-utils';
 import {
   canTakeTrip,
   checkFutureCompliance,
@@ -9,7 +10,6 @@ import {
   isTripExpired,
   isTripInWindow,
   maxConsecutiveStayFrom,
-  nextAvailableEntryDate,
   tripDurationDays,
 } from './schengen-calculator';
 
@@ -251,18 +251,5 @@ describe('isTripExpired', () => {
     expect(
       isTripExpired({ entry: addDays(dayBeforeWindow, -5), exit: dayBeforeWindow }, referenceDate),
     ).toBe(true);
-  });
-});
-
-describe('nextAvailableEntryDate', () => {
-  it('returns the same date when there is already room', () => {
-    expect(nextAvailableEntryDate([], '2024-01-01')).toBe('2024-01-01');
-  });
-
-  it('returns the date the window frees up when currently at the limit', () => {
-    const fromDate = '2024-01-01';
-    const entry = addDays(fromDate, -89);
-    const trips = [trip('t1', entry, fromDate)]; // exactly 90 days, ending today
-    expect(nextAvailableEntryDate(trips, fromDate)).toBe(addDays(fromDate, 91));
   });
 });

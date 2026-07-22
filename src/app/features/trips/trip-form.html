@@ -2,43 +2,57 @@
   class="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-end sm:gap-4"
   (ngSubmit)="submit()"
 >
-  <label class="flex flex-col text-sm text-gray-600 dark:text-gray-300">
+  <label class="flex w-full flex-col text-sm text-gray-600 sm:flex-1 dark:text-gray-300">
     Intrare
     <input
       type="date"
       name="entry"
       [(ngModel)]="entry"
-      class="rounded-md border border-gray-300 px-3 py-2 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 dark:[color-scheme:dark]"
+      class="w-full rounded-md border border-gray-300 px-3 py-2 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 dark:[color-scheme:dark]"
       required
     />
   </label>
-  <label class="flex flex-col text-sm text-gray-600 dark:text-gray-300">
+  <label class="flex w-full flex-col text-sm text-gray-600 sm:flex-1 dark:text-gray-300">
     Ieșire
     <input
       type="date"
       name="exit"
       [(ngModel)]="exit"
-      class="rounded-md border border-gray-300 px-3 py-2 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 dark:[color-scheme:dark]"
+      class="w-full rounded-md border border-gray-300 px-3 py-2 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 dark:[color-scheme:dark]"
       required
     />
   </label>
-  <label class="flex flex-col text-sm text-gray-600 dark:text-gray-300">
+  <label class="flex w-full flex-col text-sm text-gray-600 sm:flex-1 dark:text-gray-300">
     Țară
-    <select
-      name="countryCode"
-      [(ngModel)]="countryCode"
-      class="rounded-md border border-gray-300 px-3 py-2 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
-      required
-    >
-      <option value="" disabled>Alege țara</option>
-      @for (country of countries; track country.code) {
-        <option [value]="country.code">{{ country.name }}</option>
-      }
-    </select>
+    <div class="relative">
+      <select
+        name="countryCode"
+        [(ngModel)]="countryCode"
+        class="w-full appearance-none rounded-md border border-gray-300 px-3 py-2 pr-8 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
+        required
+      >
+        <option value="" disabled>Alege țara</option>
+        @for (country of countries; track country.code) {
+          <option [value]="country.code">{{ country.name }}</option>
+        }
+      </select>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        class="pointer-events-none absolute top-1/2 right-2 h-4 w-4 -translate-y-1/2 text-gray-500 dark:text-gray-400"
+      >
+        <path
+          fill-rule="evenodd"
+          d="M5.22 8.22a.75.75 0 0 1 1.06 0L12 13.94l5.72-5.72a.75.75 0 1 1 1.06 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z"
+          clip-rule="evenodd"
+        />
+      </svg>
+    </div>
   </label>
   <button
     type="submit"
-    class="shrink-0 rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+    class="w-full shrink-0 rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 sm:w-auto"
   >
     Adaugă călătorie
   </button>

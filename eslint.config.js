@@ -37,11 +37,13 @@ module.exports = defineConfig([
           style: 'kebab-case',
         },
       ],
+      '@angular-eslint/prefer-standalone': 'error',
 
       // --- File & code organization ---
       'max-classes-per-file': ['error', 1],
       'simple-import-sort/imports': 'error',
       'simple-import-sort/exports': 'error',
+      '@typescript-eslint/consistent-type-imports': ['error', { prefer: 'type-imports' }],
 
       // --- Naming ---
       '@typescript-eslint/naming-convention': [

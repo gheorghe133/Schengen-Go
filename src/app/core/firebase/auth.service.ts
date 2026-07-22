@@ -1,18 +1,12 @@
 import { Injectable, signal } from '@angular/core';
-import {
-  GoogleAuthProvider,
-  onAuthStateChanged,
-  signInWithPopup,
-  signOut,
-  User,
-} from 'firebase/auth';
+import type { User } from 'firebase/auth';
+import { GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signOut } from 'firebase/auth';
 
 import { auth } from './firebase-app';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   public readonly user = signal<User | null>(null);
-  /** True once Firebase has resolved the initial auth state (signed in or not). */
   public readonly ready = signal(false);
 
   constructor() {

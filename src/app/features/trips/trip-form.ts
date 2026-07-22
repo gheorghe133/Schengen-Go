@@ -1,9 +1,8 @@
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-
-import { validateDateRange } from '../../core/date-utils';
-import { SCHENGEN_COUNTRIES } from '../../core/schengen-countries';
-import { TripsStore } from '../../core/trips.store';
+import { TripsStore } from '@core/trips.store';
+import { validateDateRange } from '@shared/date-utils';
+import { SCHENGEN_COUNTRIES } from '@shared/schengen-rules/schengen-countries';
 
 @Component({
   selector: 'app-trip-form',

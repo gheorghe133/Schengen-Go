@@ -1,11 +1,11 @@
 import { computed, effect, inject, Injectable, signal } from '@angular/core';
+import type { SchengenStatus } from '@models/schengen-status.model';
+import type { Trip } from '@models/trip.model';
+import { getStatus } from '@shared/schengen-rules/schengen-calculator';
 import { addDoc, collection, deleteDoc, doc, onSnapshot, writeBatch } from 'firebase/firestore';
 
-import { SchengenStatus } from '../models/schengen-status.model';
-import { Trip } from '../models/trip.model';
 import { AuthService } from './firebase/auth.service';
 import { db } from './firebase/firebase-app';
-import { getStatus } from './schengen-calculator';
 
 function todayIso(): string {
   return new Date().toISOString().slice(0, 10);
@@ -18,8 +18,8 @@ export class TripsStore {
 
   public readonly trips = signal<Trip[]>([]);
   public readonly today = signal<string>(todayIso());
+  public readonly ready = signal(false);
 
-  /** Most recent/upcoming trips first, so the list stays useful as it grows over time. */
   public readonly sortedTrips = computed(() =>
     [...this.trips()].sort((a, b) => (a.entry < b.entry ? 1 : a.entry > b.entry ? -1 : 0)),
   );
@@ -32,12 +32,14 @@ export class TripsStore {
       this.unsubscribe?.();
       this.unsubscribe = null;
       this.trips.set([]);
+      this.ready.set(false);
       if (!user) return;
 
       this.unsubscribe = onSnapshot(collection(db, 'users', user.uid, 'trips'), (snapshot) => {
         this.trips.set(
           snapshot.docs.map((tripDoc) => ({ id: tripDoc.id, ...tripDoc.data() }) as Trip),
         );
+        this.ready.set(true);
       });
     });
   }

@@ -2,8 +2,9 @@ import { Component, inject, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
 import { AuthService } from './core/firebase/auth.service';
-import { SignIn } from './core/firebase/sign-in';
-import { ThemeSwitcher } from './core/theme-switcher';
+import { TripsStore } from './core/trips.store';
+import { SignIn } from './features/auth/sign-in';
+import { ThemeSwitcher } from './shared/ui/theme-switcher/theme-switcher';
 
 @Component({
   selector: 'app-root',
@@ -12,6 +13,7 @@ import { ThemeSwitcher } from './core/theme-switcher';
   styleUrl: './app.css',
 })
 export class App {
-  protected readonly title = signal('SchengenGo');
+  protected readonly title = signal('Schengen Go');
   protected readonly authService = inject(AuthService);
+  protected readonly tripsStore = inject(TripsStore);
 }

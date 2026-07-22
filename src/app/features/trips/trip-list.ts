@@ -1,9 +1,12 @@
 import { Component, computed, inject } from '@angular/core';
-
-import { isTripExpired, isTripInWindow, tripDurationDays } from '../../core/schengen-calculator';
-import { schengenCountryName } from '../../core/schengen-countries';
-import { TripsStore } from '../../core/trips.store';
-import { Trip } from '../../models/trip.model';
+import { TripsStore } from '@core/trips.store';
+import type { Trip } from '@models/trip.model';
+import {
+  isTripExpired,
+  isTripInWindow,
+  tripDurationDays,
+} from '@shared/schengen-rules/schengen-calculator';
+import { schengenCountryName } from '@shared/schengen-rules/schengen-countries';
 
 type TripStatus = 'in-window' | 'expired' | 'upcoming';
 
