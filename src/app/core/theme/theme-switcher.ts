@@ -1,4 +1,5 @@
 import { Component, inject } from '@angular/core';
+
 import { ThemePreference, ThemeService } from './theme.service';
 
 @Component({

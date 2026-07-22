@@ -1,4 +1,5 @@
 import { Component, computed, inject } from '@angular/core';
+
 import {
   isTripExpired,
   isTripInWindow,
@@ -36,7 +37,7 @@ export class TripList {
     return isTripExpired(trip, today) ? 'expired' : 'upcoming';
   }
 
-  async removeTrip(id: string): Promise<void> {
+  protected async removeTrip(id: string): Promise<void> {
     this.error = null;
     try {
       await this.store.removeTrip(id);
@@ -45,7 +46,7 @@ export class TripList {
     }
   }
 
-  async clearExpiredTrips(): Promise<void> {
+  protected async clearExpiredTrips(): Promise<void> {
     this.error = null;
     const today = this.store.today();
     const ids = new Set(

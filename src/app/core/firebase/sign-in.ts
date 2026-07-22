@@ -1,4 +1,5 @@
 import { Component, inject } from '@angular/core';
+
 import { AuthService } from './auth.service';
 
 @Component({
@@ -10,7 +11,7 @@ export class SignIn {
   protected error: string | null = null;
   protected loading = false;
 
-  async signIn(): Promise<void> {
+  protected async signIn(): Promise<void> {
     this.error = null;
     this.loading = true;
     try {

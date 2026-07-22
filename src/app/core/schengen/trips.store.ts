@@ -1,5 +1,6 @@
-import { Injectable, computed, effect, inject, signal } from '@angular/core';
+import { computed, effect, inject, Injectable, signal } from '@angular/core';
 import { addDoc, collection, deleteDoc, doc, onSnapshot, writeBatch } from 'firebase/firestore';
+
 import { AuthService } from '../firebase/auth.service';
 import { db } from '../firebase/firebase-app';
 import { getStatus, SchengenStatus } from './schengen-calculator';
@@ -12,18 +13,17 @@ function todayIso(): string {
 @Injectable({ providedIn: 'root' })
 export class TripsStore {
   private readonly authService = inject(AuthService);
+  private unsubscribe: (() => void) | null = null;
 
-  readonly trips = signal<Trip[]>([]);
-  readonly today = signal<string>(todayIso());
+  public readonly trips = signal<Trip[]>([]);
+  public readonly today = signal<string>(todayIso());
 
   /** Most recent/upcoming trips first, so the list stays useful as it grows over time. */
-  readonly sortedTrips = computed(() =>
+  public readonly sortedTrips = computed(() =>
     [...this.trips()].sort((a, b) => (a.entry < b.entry ? 1 : a.entry > b.entry ? -1 : 0)),
   );
 
-  readonly status = computed<SchengenStatus>(() => getStatus(this.trips(), this.today()));
-
-  private unsubscribe: (() => void) | null = null;
+  public readonly status = computed<SchengenStatus>(() => getStatus(this.trips(), this.today()));
 
   constructor() {
     effect(() => {
@@ -41,26 +41,26 @@ export class TripsStore {
     });
   }
 
-  private requireUid(): string {
-    const user = this.authService.user();
-    if (!user) throw new Error('No signed-in user.');
-    return user.uid;
-  }
-
-  async addTrip(entry: string, exit: string, countryCode: string): Promise<void> {
+  public async addTrip(entry: string, exit: string, countryCode: string): Promise<void> {
     const uid = this.requireUid();
     await addDoc(collection(db, 'users', uid, 'trips'), { entry, exit, countryCode });
   }
 
-  async removeTrip(id: string): Promise<void> {
+  public async removeTrip(id: string): Promise<void> {
     const uid = this.requireUid();
     await deleteDoc(doc(db, 'users', uid, 'trips', id));
   }
 
-  async removeTrips(ids: ReadonlySet<string>): Promise<void> {
+  public async removeTrips(ids: ReadonlySet<string>): Promise<void> {
     const uid = this.requireUid();
     const batch = writeBatch(db);
     ids.forEach((id) => batch.delete(doc(db, 'users', uid, 'trips', id)));
     await batch.commit();
+  }
+
+  private requireUid(): string {
+    const user = this.authService.user();
+    if (!user) throw new Error('No signed-in user.');
+    return user.uid;
   }
 }

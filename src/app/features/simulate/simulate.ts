@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+
 import { validateDateRange } from '../../core/schengen/date-utils';
 import {
   canTakeTrip,
@@ -16,14 +17,14 @@ import { TripsStore } from '../../core/schengen/trips.store';
 export class Simulate {
   private readonly store = inject(TripsStore);
 
-  entry = '';
-  exit = '';
-  error: string | null = null;
-  result: TripEvaluation | null = null;
-  maxStayIfStartingHere: number | null = null;
-  violationHitsPlannedTrip = false;
+  protected entry = '';
+  protected exit = '';
+  protected error: string | null = null;
+  protected result: TripEvaluation | null = null;
+  protected maxStayIfStartingHere: number | null = null;
+  protected violationHitsPlannedTrip = false;
 
-  check(): void {
+  protected check(): void {
     this.result = null;
     this.maxStayIfStartingHere = null;
     this.violationHitsPlannedTrip = false;

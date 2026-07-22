@@ -1,4 +1,5 @@
 import { Component, computed, inject, signal } from '@angular/core';
+
 import { addDays, buildMonthGrid, MonthDay } from '../../core/schengen/date-utils';
 import { isDateCovered } from '../../core/schengen/schengen-calculator';
 import { TripsStore } from '../../core/schengen/trips.store';
@@ -43,7 +44,7 @@ export class Calendar {
 
   private readonly windowStart = computed(() => addDays(this.store.today(), -179));
 
-  previousMonth(): void {
+  protected previousMonth(): void {
     if (this.viewMonth() === 0) {
       this.viewYear.update((year) => year - 1);
       this.viewMonth.set(11);
@@ -52,7 +53,7 @@ export class Calendar {
     }
   }
 
-  nextMonth(): void {
+  protected nextMonth(): void {
     if (this.viewMonth() === 11) {
       this.viewYear.update((year) => year + 1);
       this.viewMonth.set(0);

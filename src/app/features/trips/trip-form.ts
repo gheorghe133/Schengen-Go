@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+
 import { validateDateRange } from '../../core/schengen/date-utils';
 import { SCHENGEN_COUNTRIES } from '../../core/schengen/schengen-countries';
 import { TripsStore } from '../../core/schengen/trips.store';
@@ -14,12 +15,12 @@ export class TripForm {
 
   protected readonly countries = SCHENGEN_COUNTRIES;
 
-  entry = '';
-  exit = '';
-  countryCode = '';
-  error: string | null = null;
+  protected entry = '';
+  protected exit = '';
+  protected countryCode = '';
+  protected error: string | null = null;
 
-  submit(): void {
+  protected submit(): void {
     this.error =
       validateDateRange(this.entry, this.exit) ?? (this.countryCode ? null : 'Selectează țara.');
     if (this.error) return;
