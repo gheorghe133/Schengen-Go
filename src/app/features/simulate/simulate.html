@@ -1,0 +1,68 @@
+<section
+  class="rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-gray-950"
+>
+  <h2 class="mb-3 text-lg font-medium text-gray-900 dark:text-gray-100">Simulează o călătorie</h2>
+
+  <form class="flex flex-col gap-3 sm:flex-row sm:items-end sm:gap-4" (ngSubmit)="check()">
+    <label class="flex flex-col text-sm text-gray-600 dark:text-gray-300">
+      Intrare
+      <input
+        type="date"
+        name="simEntry"
+        [(ngModel)]="entry"
+        class="rounded-md border border-gray-300 px-3 py-2 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 dark:[color-scheme:dark]"
+        required
+      />
+    </label>
+    <label class="flex flex-col text-sm text-gray-600 dark:text-gray-300">
+      Ieșire
+      <input
+        type="date"
+        name="simExit"
+        [(ngModel)]="exit"
+        class="rounded-md border border-gray-300 px-3 py-2 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 dark:[color-scheme:dark]"
+        required
+      />
+    </label>
+    <button
+      type="submit"
+      class="rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-800 dark:bg-gray-200 dark:text-gray-900 dark:hover:bg-white"
+    >
+      Verifică
+    </button>
+  </form>
+
+  @if (error) {
+    <p class="mt-3 text-sm text-red-600 dark:text-red-400">{{ error }}</p>
+  }
+
+  @if (result) {
+    @if (result.allowed) {
+      <p class="mt-3 text-sm font-medium text-green-700 dark:text-green-400">
+        Poți face această călătorie. Vei folosi maxim {{ result.maxUsedDays }} din 90 de zile.
+      </p>
+    } @else {
+      <p class="mt-3 text-sm font-medium text-red-600 dark:text-red-400">
+        Nu poți face toată călătoria — ai depăși limita pe {{ result.firstViolationDate }} ({{
+          result.maxUsedDays
+        }}
+        zile folosite).
+      </p>
+      @if (violationHitsPlannedTrip) {
+        <p class="mt-1 text-sm text-amber-700 dark:text-amber-400">
+          Depășirea apare într-o călătorie deja planificată, nu în cea simulată — ar trebui să
+          reconsideri una dintre ele.
+        </p>
+      }
+      @if (maxStayIfStartingHere !== null) {
+        <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+          Dacă începi pe {{ entry }}, poți sta maxim
+          <span class="font-medium text-gray-900 dark:text-gray-100">{{
+            maxStayIfStartingHere
+          }}</span>
+          {{ maxStayIfStartingHere === 1 ? 'zi' : 'zile' }} consecutive.
+        </p>
+      }
+    }
+  }
+</section>

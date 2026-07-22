@@ -1,0 +1,52 @@
+@if (store.sortedTrips().length === 0) {
+  <p class="text-sm text-gray-500 dark:text-gray-400">Nu ai adăugat încă nicio călătorie.</p>
+} @else {
+  @if (expiredCount() > 0) {
+    <button
+      type="button"
+      (click)="clearExpiredTrips()"
+      class="mb-2 text-xs text-gray-500 hover:underline dark:text-gray-400"
+    >
+      Șterge {{ expiredCount() }}
+      {{ expiredCount() === 1 ? 'călătorie expirată' : 'călătorii expirate' }}
+    </button>
+  }
+
+  <ul class="divide-y divide-gray-200 dark:divide-gray-800">
+    @for (trip of store.sortedTrips(); track trip.id) {
+      <li
+        class="flex items-center justify-between gap-3 py-2"
+        [class.opacity-50]="status(trip) === 'expired'"
+      >
+        <span class="text-sm text-gray-800 dark:text-gray-200">
+          {{ trip.entry }} → {{ trip.exit }}
+          <span class="text-gray-500 dark:text-gray-400">
+            ({{ duration(trip) }} {{ duration(trip) === 1 ? 'zi' : 'zile' }})
+          </span>
+          @if (countryName(trip)) {
+            <span class="text-gray-500 dark:text-gray-400">· {{ countryName(trip) }}</span>
+          }
+          @if (status(trip) === 'expired') {
+            <span class="ml-1 text-xs text-gray-400 dark:text-gray-500"
+              >· expirată, nu mai contează</span
+            >
+          } @else if (status(trip) === 'upcoming') {
+            <span class="ml-1 text-xs text-blue-500 dark:text-blue-400">· planificată</span>
+          }
+        </span>
+        <button
+          type="button"
+          (click)="removeTrip(trip.id)"
+          [attr.aria-label]="'Șterge călătoria ' + trip.entry + ' → ' + trip.exit"
+          class="shrink-0 text-sm text-red-600 hover:underline dark:text-red-400"
+        >
+          Șterge
+        </button>
+      </li>
+    }
+  </ul>
+
+  @if (error) {
+    <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ error }}</p>
+  }
+}

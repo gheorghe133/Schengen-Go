@@ -1,3 +1,20 @@
 /* You can add global styles to this file, and also import other style files */
 
 @import 'tailwindcss';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+ * html/body need an explicit background too, not just the app's root div — otherwise
+ * overscroll bounce (trackpad rubber-banding, pull-to-refresh) reveals the browser's
+ * default white behind the content in dark mode.
+ */
+html,
+body {
+  background-color: #f9fafb; /* Tailwind gray-50, matches the light theme's page background */
+}
+
+html.dark,
+html.dark body {
+  background-color: #000000;
+}

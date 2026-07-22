@@ -1,0 +1,59 @@
+<div class="rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-gray-950">
+  <div class="mb-3 flex items-center justify-between">
+    <button
+      type="button"
+      (click)="previousMonth()"
+      aria-label="Luna precedentă"
+      class="rounded px-2 py-1 text-sm text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
+    >
+      ‹
+    </button>
+    <h2 class="text-sm font-medium text-gray-900 dark:text-gray-100">{{ monthLabel() }}</h2>
+    <button
+      type="button"
+      (click)="nextMonth()"
+      aria-label="Luna următoare"
+      class="rounded px-2 py-1 text-sm text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
+    >
+      ›
+    </button>
+  </div>
+
+  <div class="grid grid-cols-7 gap-1 text-center text-xs text-gray-400 dark:text-gray-500">
+    @for (label of weekdayLabels; track label) {
+      <div>{{ label }}</div>
+    }
+  </div>
+
+  <div class="mt-1 grid grid-cols-7 gap-1">
+    @for (week of weeks(); track $index) {
+      @for (day of week; track day.date) {
+        <div
+          class="flex h-8 items-center justify-center rounded-md text-xs"
+          [class.text-gray-300]="!day.inMonth"
+          [class.dark:text-gray-700]="!day.inMonth"
+          [class.text-gray-700]="day.inMonth && dayStatus(day.date) === 'plain'"
+          [class.dark:text-gray-300]="day.inMonth && dayStatus(day.date) === 'plain'"
+          [class.bg-indigo-600]="day.inMonth && dayStatus(day.date) === 'used'"
+          [class.text-white]="day.inMonth && dayStatus(day.date) === 'used'"
+          [class.bg-indigo-100]="day.inMonth && dayStatus(day.date) === 'other-covered'"
+          [class.dark:bg-indigo-900]="day.inMonth && dayStatus(day.date) === 'other-covered'"
+          [class.ring-2]="day.inMonth && isToday(day.date)"
+          [class.ring-blue-400]="day.inMonth && isToday(day.date)"
+        >
+          {{ dayNumber(day.date) }}
+        </div>
+      }
+    }
+  </div>
+
+  <div class="mt-3 flex flex-wrap gap-4 text-xs text-gray-500 dark:text-gray-400">
+    <span class="flex items-center gap-1">
+      <span class="h-3 w-3 rounded bg-indigo-600"></span> zi folosită (ultimele 180)
+    </span>
+    <span class="flex items-center gap-1">
+      <span class="h-3 w-3 rounded bg-indigo-100 dark:bg-indigo-900"></span> călătorie în afara
+      ferestrei
+    </span>
+  </div>
+</div>
