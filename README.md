@@ -1,59 +1,82 @@
-# SchengenGo
+# Schengen Go
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.3.
+A web app that tracks the Schengen Area's 90-days-in-any-180-days rule, so
+you always know exactly how many days you have left.
 
-## Development server
+## Features
 
-To start a local development server, run:
+- **Trip log** — add entry/exit dates and a Schengen country per trip; the
+  list distinguishes expired, in-window, and future/planned trips.
+- **Compliance summary** — days used out of 90, days remaining, and an
+  early warning if trips already on the calendar will cause a future
+  overstay (even if today's count looks fine).
+- **Calendar view** — a month grid highlighting which days count toward
+  the rolling 180-day window.
+- **Simulate a trip** — check whether a hypothetical trip would be
+  compliant before booking it, accounting for every trip already on file.
+- **Google sign-in + sync** — trips are stored per-account in Firestore
+  and sync across devices in real time.
+- **Light / dark / system theme.**
 
-```bash
-ng serve
-```
+## Tech stack
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+- [Angular 21](https://angular.dev) — standalone components, signals
+- [Tailwind CSS 4](https://tailwindcss.com)
+- [Firebase](https://firebase.google.com) — Google auth + Firestore
+- [Vitest](https://vitest.dev) — unit and component tests
+- ESLint (`angular-eslint`) + Prettier + Husky + Commitlint
 
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
+## Getting started
 
 ```bash
-ng build
+npm install
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+The app needs a Firebase project with **Google sign-in** enabled and a
+**Firestore** database. The web config lives in
+[`src/app/core/firebase/firebase-config.ts`](src/app/core/firebase/firebase-config.ts) —
+it's a public client config, not a secret; access control is enforced by
+Firestore Security Rules (`request.auth.uid == userId`), not by hiding it.
 
 ```bash
-ng test
+npm start          # ng serve — http://localhost:4200
 ```
 
-## Running end-to-end tests
+## Project structure
 
-For end-to-end (e2e) testing, run:
+```text
+src/app/
+├── core/            # singletons — one instance for the whole app
+│   ├── firebase/    # Firebase init, auth
+│   ├── theme.service.ts
+│   └── trips.store.ts
+├── shared/          # reusable, stateless code used by 2+ features
+│   ├── ui/          # dumb, reusable components (e.g. theme switcher)
+│   ├── schengen-rules/  # the 90/180 calculation engine + country list
+│   └── date-utils.ts
+├── models/          # every interface/type, kept central
+└── features/        # one folder per screen: auth, dashboard, calendar,
+                      # simulate, summary, trips
+```
+
+Path aliases (`@core/*`, `@shared/*`, `@models/*`, `@features/*`) are
+configured in `tsconfig.json`, so imports don't need `../../` chains.
+
+## Scripts
 
 ```bash
-ng e2e
+npm test            # unit + component tests (Vitest)
+npm run lint         # ESLint
+npm run lint:fix     # ESLint with autofix
+npm run format       # Prettier — write
+npm run format:check # Prettier — check only
+npm run build        # production build
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+## Contributing
 
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- Work on a branch, open a PR — no direct pushes to `main`.
+- Commit messages follow [Conventional Commits](https://www.conventionalcommits.org/)
+  (enforced by a commit-msg hook).
+- `pre-commit` runs lint + format on staged files; `pre-push` runs the
+  full lint and format check.
