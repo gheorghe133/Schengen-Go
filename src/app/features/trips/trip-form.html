@@ -2,23 +2,23 @@
   class="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-end sm:gap-4"
   (ngSubmit)="submit()"
 >
-  <label class="flex min-w-0 flex-col text-sm text-gray-600 sm:flex-1 dark:text-gray-300">
+  <label class="flex w-full min-w-0 flex-col text-sm text-gray-600 sm:flex-1 dark:text-gray-300">
     Intrare
     <input
       type="date"
       name="entry"
       [(ngModel)]="entry"
-      class="min-w-0 rounded-md border border-gray-300 px-3 py-2 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 dark:[color-scheme:dark]"
+      class="w-full min-w-0 rounded-md border border-gray-300 px-3 py-2 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 dark:[color-scheme:dark]"
       required
     />
   </label>
-  <label class="flex min-w-0 flex-col text-sm text-gray-600 sm:flex-1 dark:text-gray-300">
+  <label class="flex w-full min-w-0 flex-col text-sm text-gray-600 sm:flex-1 dark:text-gray-300">
     Ieșire
     <input
       type="date"
       name="exit"
       [(ngModel)]="exit"
-      class="min-w-0 rounded-md border border-gray-300 px-3 py-2 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 dark:[color-scheme:dark]"
+      class="w-full min-w-0 rounded-md border border-gray-300 px-3 py-2 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 dark:[color-scheme:dark]"
       required
     />
   </label>
